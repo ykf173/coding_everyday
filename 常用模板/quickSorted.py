@@ -1,20 +1,23 @@
 def quickSorted(nums, left, right):
     if left < right:
-        curNum = nums[left]
-        while left < right:
-            while left < right and curNum < nums[right]:
-                right -= 1
-            nums[left] = nums[right]
-            while left < right and curNum > nums[left]:
-                left += 1
-            nums[right] = nums[left]
-        nums[left] = curNum
-        quickSorted(nums, 0, left - 1)
-        quickSorted(nums, left + 1, right)
+        low, high = left, right
+        curNum = nums[low]
+        while low < high:
+            while low < high and curNum <= nums[high]:
+                high -= 1
+            if low < high:
+                nums[low] = nums[high]
+            while low < high and curNum >= nums[low]:
+                low += 1
+            if low < high:
+                nums[high] = nums[low]
+        nums[low] = curNum
+        quickSorted(nums, left, low - 1)
+        quickSorted(nums, low + 1, right)
 
 
 if __name__ == '__main__':
-    nums = [29, 1, 2, 4, 6, 7, 50, 3]
+    nums = [29, 1, 2, 4, 6, 7, 50, 3, 1000, 0, 0]
     size = len(nums)
     quickSorted(nums, 0, size - 1)
     print(nums)
