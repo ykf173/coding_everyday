@@ -77,3 +77,7 @@ if __name__ == '__main__':
 1,3,2
 111,12,24,5
 '''
+
+
+from itertools import combinations
+print(combinations(set([1,2,3]), set([2,3,4])))
