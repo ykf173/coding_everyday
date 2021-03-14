@@ -12,7 +12,6 @@ def reverse_str(s):
     new_str2 = new_str1[:]
     for i in range(len(s)):
         count = 0
-        a = b = i
         if new_str1[i] == '1':
             new_str2[i] = '0'
             if 0 <= i-1 <= len(s) - 1 and new_str1[i-1] == '1':
