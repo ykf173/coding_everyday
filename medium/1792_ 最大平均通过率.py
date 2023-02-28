@@ -32,28 +32,47 @@ from typing import List
 
 class Solution:
     def maxAverageRatio(self, classes: List[List[int]], extraStudents: int) -> float:
-        diff = lambda x, y: (x + 1) * (y + 1) - x * y
-
+        diff = lambda x, y: (x + 1) / (y + 1) - x / y
         ans = 0.
         que = []
         for x, y in classes:
-            que.append((-diff(x + 1, y + 1), x + 1, y + 1))
-            ans += (x + 1) / (y + 1)
+            que.append((-diff(x, y), x, y))
+            ans += x / y
 
         heapq.heapify(que)
 
-        for i in range(extraStudents):
-            diff, x, y = heapq.heappop(que)
-            ans -= diff
-            # m = -diff(x + 1, y + 1), x + 1, y + 1
+        for _ in range(extraStudents):
+            di, x, y = heapq.heappop(que)
+            ans -= di
             heapq.heappush(que, (-diff(x + 1, y + 1), x + 1, y + 1))
-            ans += diff
-
         return ans / len(que)
+
+
+# class Solution:
+#     def maxAverageRatio(self, classes: List[List[int]], extraStudents: int) -> float:
+#         diff = lambda x, y: (x + 1) / (y + 1) - x / y
+#
+#         q = list()
+#         ans = 0.
+#         for x, y in classes:
+#             ans += x / y
+#             # python 中的优先队列是小根堆，所以要对增加量取相反数，达到大根堆的效果
+#             q.append((-diff(x, y), x, y))
+#
+#         heapq.heapify(q)  # 建大根堆
+#
+#         for _ in range(extraStudents):
+#             d, x, y = heapq.heappop(q)  # 取出最大的，繼續加一
+#             ans += -d
+#             heapq.heappush(q, (-diff(x + 1, y + 1), x + 1, y + 1))
+#
+#         return ans / len(classes)
 
 
 if __name__ == '__main__':
     s = Solution()
     classes = [[1, 2], [3, 5], [2, 2]]
+    classes = [[2, 4], [3, 9], [4, 5], [2, 10]]
     extraStudents = 2
+    extraStudents = 4
     print(s.maxAverageRatio(classes, extraStudents))
