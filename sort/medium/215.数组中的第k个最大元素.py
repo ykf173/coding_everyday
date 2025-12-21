@@ -9,27 +9,69 @@ import random
 
 # @lc code=start
 class Solution:
-
-    def build_heap(nums):
-        n = len(nums)
-        mid = int(n / 2)
-        for i in range(n):
-            
-
-
-    def replace_heap(): 
+    def maxheaptop(self, nums, k):
+        '''
+        大根堆，时间复杂度，最坏接近O(nlogn)
         
+        :param nums: 说明
+        :param k: 说明
+        '''
+        def sift_root(i, n):
+            while True:
+                largest = i
+                left = 2 * i + 1
+                right = left + 1
 
-    def heap_large(self, nums, k):
-        min_heap = nums[:k]
-        heapq.heapify(min_heap)
+                if left < n and nums[left] > nums[largest]:
+                    largest = left
+                if right < n and nums[right] > nums[largest]:
+                    largest = right
 
-        for num in nums[k:]:
-            if num > min_heap[0]:
-                heapq.heapreplace(min_heap, num)
+                if largest == i:
+                    break
+                nums[i], nums[largest] = nums[largest], nums[i]
+                i = largest
+        
+        n = len(nums)
+        # 堆大小为n-k
+        for i in range(n//2+1, -1, -1):
+            sift_root(i, n)
+    
+        # 调整堆
+        for i in range(n-1, n-k-1, -1):
+            nums[i], nums[0] = nums[0], nums[i]
+            sift_root(0, i)
+        print(nums)
+        return nums[n-k]
+    
+    def min_heap_top(self, nums, k):
+        def sift_root(i, n):
+            while True:
+                smallest = i
+                left = 2 * i + 1
+                right = left + 1
 
-        return min_heap[0]
+                if left < n and nums[left] < nums[smallest]:
+                    smallest = left
+                if right < n and nums[right] < nums[smallest]:
+                    smallest = right
 
+                if smallest == i:
+                    break
+                nums[smallest], nums[i] = nums[i], nums[smallest]
+                i = smallest
+
+        n = len(nums)
+        # k = n - k
+        for i in range(k // 2 + 1, -1, -1):
+            sift_root(i, n-k)
+
+        for i in range(k, n):
+            if nums[i] > nums[0]:
+                nums[0], nums[i] = nums[i], nums[0]
+                sift_root(0, k)
+
+        return nums[0]
 
     def quich_select(self, left, right, nums, k):
         if left >= right:
@@ -66,13 +108,24 @@ class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
         # return self.heap_large(nums, k)
         n = len(nums)
-        return self.quich_select(0, n - 1, nums, n - k)
+        # return self.quich_select(0, n - 1, nums, n - k)
+        return s.maxheaptop(nums, k)
 
 if __name__ == '__main__':
     nums = [3,2,1,5,6,4]
     k = 2
+    # nums = [1]
+    # k = 1
+
+    # nums = [3,2,3,1,2,4,5,5,6]
+    # k = 4
     s = Solution()
-    print(s.findKthLargest(nums, k))
+    # print(s.findKthLargest(nums, k))
+
+    # print(s.maxheaptop(nums, k))
+
+    print(s.min_heap_top(nums, k))
+
         
 # @lc code=end
 
